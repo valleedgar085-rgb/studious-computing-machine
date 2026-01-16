@@ -11,11 +11,20 @@ import { PatternPadEditor } from '../components/PatternPadEditor';
 import { TemplateControls } from '../components/TemplateControls';
 import { Snackbar } from '../components/Snackbar';
 import { AudioVisualizer } from '../components/AudioVisualizer';
+import { ChordTypeControl } from '../components/ChordTypeControl';
+import { ProgressionStyleControl } from '../components/ProgressionStyleControl';
+import { ComplexityControl } from '../components/ComplexityControl';
+import { TensionControl } from '../components/TensionControl';
+import { ChordType, ProgressionStyle } from '../services/MusicTheory';
 
 export const ChordGeneratorScreen: React.FC = () => {
   const [pattern, setPattern] = useState<Pattern | null>(null);
   const [density, setDensity] = useState(userPrefsStore.getDensity());
   const [octave, setOctave] = useState(userPrefsStore.getOctave());
+  const [chordType, setChordType] = useState<ChordType>('major');
+  const [progressionStyle, setProgressionStyle] = useState<ProgressionStyle>('pop');
+  const [complexity, setComplexity] = useState(0.5);
+  const [tension, setTension] = useState(0.5);
   const [isPlaying, setIsPlaying] = useState(false);
   const [snackbar, setSnackbar] = useState<{ message: string; type?: 'success' | 'error' } | null>(null);
 
@@ -25,19 +34,92 @@ export const ChordGeneratorScreen: React.FC = () => {
   }, []);
 
   const generatePattern = () => {
-    const newPattern = patternFactory.generateChordPattern(density, octave);
+    const newPattern = patternFactory.generateChordPattern(
+      density, 
+      octave, 
+      chordType, 
+      progressionStyle, 
+      complexity, 
+      tension
+    );
     setPattern(newPattern);
   };
 
   const handleDensityChange = (newDensity: number) => {
     setDensity(newDensity);
-    const newPattern = patternFactory.generateChordPattern(newDensity, octave);
+    const newPattern = patternFactory.generateChordPattern(
+      newDensity, 
+      octave, 
+      chordType, 
+      progressionStyle, 
+      complexity, 
+      tension
+    );
     setPattern(newPattern);
   };
 
   const handleOctaveChange = (newOctave: number) => {
     setOctave(newOctave);
-    const newPattern = patternFactory.generateChordPattern(density, newOctave);
+    const newPattern = patternFactory.generateChordPattern(
+      density, 
+      newOctave, 
+      chordType, 
+      progressionStyle, 
+      complexity, 
+      tension
+    );
+    setPattern(newPattern);
+  };
+
+  const handleChordTypeChange = (newType: ChordType) => {
+    setChordType(newType);
+    const newPattern = patternFactory.generateChordPattern(
+      density, 
+      octave, 
+      newType, 
+      progressionStyle, 
+      complexity, 
+      tension
+    );
+    setPattern(newPattern);
+  };
+
+  const handleProgressionStyleChange = (newStyle: ProgressionStyle) => {
+    setProgressionStyle(newStyle);
+    const newPattern = patternFactory.generateChordPattern(
+      density, 
+      octave, 
+      chordType, 
+      newStyle, 
+      complexity, 
+      tension
+    );
+    setPattern(newPattern);
+  };
+
+  const handleComplexityChange = (newComplexity: number) => {
+    setComplexity(newComplexity);
+    const newPattern = patternFactory.generateChordPattern(
+      density, 
+      octave, 
+      chordType, 
+      progressionStyle, 
+      newComplexity, 
+      tension
+    );
+    setPattern(newPattern);
+  };
+
+  const handleTensionChange = (newTension: number) => {
+    setTension(newTension);
+    const newPattern = patternFactory.generateChordPattern(
+      density, 
+      octave, 
+      chordType, 
+      progressionStyle, 
+      complexity, 
+      newTension
+    );
     setPattern(newPattern);
   };
 
@@ -92,6 +174,33 @@ export const ChordGeneratorScreen: React.FC = () => {
         <DensityControl value={density} onChange={handleDensityChange} />
         <OctaveControl value={octave} onChange={handleOctaveChange} />
         <ResetClearControls onReset={handleReset} onClear={handleClear} />
+      </div>
+
+      <div style={{ 
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: '15px',
+        marginBottom: '20px'
+      }}>
+        <ProgressionStyleControl 
+          value={progressionStyle} 
+          onChange={handleProgressionStyleChange} 
+        />
+        <ComplexityControl 
+          value={complexity} 
+          onChange={handleComplexityChange} 
+        />
+        <TensionControl 
+          value={tension} 
+          onChange={handleTensionChange} 
+        />
+      </div>
+
+      <div style={{ marginBottom: '20px' }}>
+        <ChordTypeControl 
+          value={chordType} 
+          onChange={handleChordTypeChange} 
+        />
       </div>
 
       <TemplateControls

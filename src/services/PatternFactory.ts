@@ -1,19 +1,42 @@
 import { Pattern, Note } from '../types';
+import { musicTheory, ChordType, ProgressionStyle } from './MusicTheory';
+
+export interface ChordPatternOptions {
+  density: number;
+  octave: number;
+  chordType?: ChordType;
+  progressionStyle?: ProgressionStyle;
+  complexity?: number;
+  tension?: number;
+}
 
 class PatternFactory {
-  generateChordPattern(density: number, octave: number): Pattern {
+  generateChordPattern(
+    density: number, 
+    octave: number,
+    _chordType: ChordType = 'major',
+    progressionStyle: ProgressionStyle = 'pop',
+    complexity: number = 0.5,
+    tension: number = 0.5
+  ): Pattern {
     const notes: Note[] = [];
-    const chords = [
-      ['C' + octave, 'E' + octave, 'G' + octave],
-      ['F' + octave, 'A' + octave, 'C' + (octave + 1)],
-      ['G' + octave, 'B' + octave, 'D' + (octave + 1)],
-      ['A' + octave, 'C' + (octave + 1), 'E' + (octave + 1)]
-    ];
-
+    
+    // Get progression based on style
+    const progression = musicTheory.getProgression(progressionStyle, 'C');
+    
     const noteCount = Math.floor(density * 8);
     for (let i = 0; i < noteCount; i++) {
-      const chordIndex = i % chords.length;
-      const chord = chords[chordIndex];
+      const progressionIndex = i % progression.chords.length;
+      let chordDef = progression.chords[progressionIndex];
+      
+      // Apply complexity adjustment
+      let adjustedType = musicTheory.adjustComplexity(chordDef.type, complexity);
+      
+      // Apply tension adjustment
+      adjustedType = musicTheory.adjustTension(adjustedType, tension);
+      
+      // Build the chord with adjusted type
+      const chord = musicTheory.buildChord(chordDef.root, adjustedType, octave);
       const time = i * 0.5;
       
       chord.forEach(pitch => {
@@ -21,7 +44,7 @@ class PatternFactory {
           pitch,
           time,
           duration: 0.4,
-          velocity: 0.7
+          velocity: 0.6 + Math.random() * 0.2
         });
       });
     }
