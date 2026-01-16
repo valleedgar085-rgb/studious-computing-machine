@@ -33,7 +33,10 @@ export const NavShell: React.FC = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#34495e' }}>
+    <div style={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
+    }}>
       <TransportBar 
         routeLabel={getRouteLabel()} 
         onStopAll={handleStopAll} 
@@ -42,55 +45,69 @@ export const NavShell: React.FC = () => {
       <div style={{ 
         display: 'flex', 
         gap: '10px', 
-        padding: '10px 20px',
-        backgroundColor: '#2c3e50',
-        borderBottom: '1px solid #1a1a1a'
+        padding: '15px 20px',
+        background: 'rgba(22, 33, 62, 0.8)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px)'
       }}>
         <button
           onClick={() => handleNavigate('chords')}
           style={{
-            padding: '10px 20px',
-            backgroundColor: currentRoute === 'chords' ? '#3498db' : '#7f8c8d',
+            padding: '12px 24px',
+            backgroundColor: currentRoute === 'chords' ? '#3498db' : 'rgba(127, 140, 141, 0.3)',
             color: 'white',
-            border: 'none',
-            borderRadius: '4px',
+            border: currentRoute === 'chords' ? '2px solid #2980b9' : '2px solid transparent',
+            borderRadius: '8px',
             cursor: 'pointer',
-            fontWeight: currentRoute === 'chords' ? 'bold' : 'normal'
+            fontWeight: currentRoute === 'chords' ? 'bold' : 'normal',
+            fontSize: '14px',
+            boxShadow: currentRoute === 'chords' ? '0 4px 15px rgba(52, 152, 219, 0.4)' : 'none',
+            transition: 'all 0.3s ease'
           }}
         >
-          Chords
+          🎹 Chords
         </button>
         <button
           onClick={() => handleNavigate('melody')}
           style={{
-            padding: '10px 20px',
-            backgroundColor: currentRoute === 'melody' ? '#3498db' : '#7f8c8d',
+            padding: '12px 24px',
+            backgroundColor: currentRoute === 'melody' ? '#3498db' : 'rgba(127, 140, 141, 0.3)',
             color: 'white',
-            border: 'none',
-            borderRadius: '4px',
+            border: currentRoute === 'melody' ? '2px solid #2980b9' : '2px solid transparent',
+            borderRadius: '8px',
             cursor: 'pointer',
-            fontWeight: currentRoute === 'melody' ? 'bold' : 'normal'
+            fontWeight: currentRoute === 'melody' ? 'bold' : 'normal',
+            fontSize: '14px',
+            boxShadow: currentRoute === 'melody' ? '0 4px 15px rgba(52, 152, 219, 0.4)' : 'none',
+            transition: 'all 0.3s ease'
           }}
         >
-          Melody
+          🎵 Melody
         </button>
         <button
           onClick={() => handleNavigate('bassline')}
           style={{
-            padding: '10px 20px',
-            backgroundColor: currentRoute === 'bassline' ? '#3498db' : '#7f8c8d',
+            padding: '12px 24px',
+            backgroundColor: currentRoute === 'bassline' ? '#3498db' : 'rgba(127, 140, 141, 0.3)',
             color: 'white',
-            border: 'none',
-            borderRadius: '4px',
+            border: currentRoute === 'bassline' ? '2px solid #2980b9' : '2px solid transparent',
+            borderRadius: '8px',
             cursor: 'pointer',
-            fontWeight: currentRoute === 'bassline' ? 'bold' : 'normal'
+            fontWeight: currentRoute === 'bassline' ? 'bold' : 'normal',
+            fontSize: '14px',
+            boxShadow: currentRoute === 'bassline' ? '0 4px 15px rgba(52, 152, 219, 0.4)' : 'none',
+            transition: 'all 0.3s ease'
           }}
         >
-          Bassline
+          🎸 Bassline
         </button>
       </div>
 
-      <div style={{ backgroundColor: '#ecf0f1', minHeight: 'calc(100vh - 120px)' }}>
+      <div style={{ 
+        background: 'transparent',
+        minHeight: 'calc(100vh - 140px)',
+        padding: '20px'
+      }}>
         {currentRoute === 'chords' && <ChordGeneratorScreen />}
         {currentRoute === 'melody' && <MelodyGeneratorScreen />}
         {currentRoute === 'bassline' && <BasslineGeneratorScreen />}
