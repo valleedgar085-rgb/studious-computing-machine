@@ -24,7 +24,7 @@ class TemplateStore {
     const templates = this.getTemplates();
     const newTemplate: Template = {
       ...template,
-      id: `template-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `template-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
       isFavorite: false,
       createdAt: Date.now(),
       updatedAt: Date.now()
@@ -76,7 +76,7 @@ class TemplateStore {
     if (template) {
       const newTemplate: Template = {
         ...template,
-        id: `template-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: `template-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
         name: `${template.name} (copy)`,
         createdAt: Date.now(),
         updatedAt: Date.now()

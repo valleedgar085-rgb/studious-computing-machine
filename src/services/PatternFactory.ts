@@ -7,7 +7,7 @@ class PatternFactory {
       ['C' + octave, 'E' + octave, 'G' + octave],
       ['F' + octave, 'A' + octave, 'C' + (octave + 1)],
       ['G' + octave, 'B' + octave, 'D' + (octave + 1)],
-      ['Am' + octave, 'C' + (octave + 1), 'E' + (octave + 1)]
+      ['A' + octave, 'C' + (octave + 1), 'E' + (octave + 1)]
     ];
 
     const noteCount = Math.floor(density * 8);
@@ -18,7 +18,7 @@ class PatternFactory {
       
       chord.forEach(pitch => {
         notes.push({
-          pitch: pitch.replace(/[A-G]m?/, (match) => match.replace('m', '')),
+          pitch,
           time,
           duration: 0.4,
           velocity: 0.7
