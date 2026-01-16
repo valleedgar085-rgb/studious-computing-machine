@@ -34,6 +34,12 @@ export interface ChordProgression {
 class MusicTheoryService {
   private readonly notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
   
+  // Thresholds for complexity and tension adjustments
+  private readonly SIMPLE_THRESHOLD = 0.3;
+  private readonly COMPLEX_THRESHOLD = 0.7;
+  private readonly CONSONANT_THRESHOLD = 0.3;
+  private readonly DISSONANT_THRESHOLD = 0.7;
+  
   // Chord interval patterns (in semitones from root)
   private readonly chordIntervals: Record<ChordType, number[]> = {
     major: [0, 4, 7],
@@ -182,12 +188,12 @@ class MusicTheoryService {
    * @param complexity 0 = simple triads, 1 = complex extended chords
    */
   adjustComplexity(type: ChordType, complexity: number): ChordType {
-    if (complexity < 0.3) {
+    if (complexity < this.SIMPLE_THRESHOLD) {
       // Simple triads
       if (type === 'major7') return 'major';
       if (type === 'minor7') return 'minor';
       if (type === 'dominant7') return 'major';
-    } else if (complexity > 0.7) {
+    } else if (complexity > this.COMPLEX_THRESHOLD) {
       // Complex chords
       if (type === 'major') return 'major7';
       if (type === 'minor') return 'minor7';
@@ -200,13 +206,14 @@ class MusicTheoryService {
    * @param tension 0 = consonant, 1 = dissonant
    */
   adjustTension(baseType: ChordType, tension: number): ChordType {
-    if (tension < 0.3) {
+    if (tension < this.CONSONANT_THRESHOLD) {
       // Consonant - prefer major/minor
       return baseType === 'minor' ? 'minor' : 'major';
-    } else if (tension > 0.7) {
-      // Dissonant - prefer diminished, augmented, or 7ths
-      const dissonant: ChordType[] = ['diminished', 'augmented', 'dominant7'];
-      return dissonant[Math.floor(Math.random() * dissonant.length)];
+    } else if (tension > this.DISSONANT_THRESHOLD) {
+      // Dissonant - prefer diminished, augmented, or 7ths based on base type
+      if (baseType === 'minor' || baseType === 'minor7') return 'diminished';
+      if (baseType === 'major' || baseType === 'major7') return 'augmented';
+      return 'dominant7';
     }
     return baseType;
   }

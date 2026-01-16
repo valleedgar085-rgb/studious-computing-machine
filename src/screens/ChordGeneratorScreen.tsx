@@ -33,94 +33,57 @@ export const ChordGeneratorScreen: React.FC = () => {
     generatePattern();
   }, []);
 
-  const generatePattern = () => {
+  const regeneratePattern = (
+    newDensity: number = density,
+    newOctave: number = octave,
+    newChordType: ChordType = chordType,
+    newStyle: ProgressionStyle = progressionStyle,
+    newComplexity: number = complexity,
+    newTension: number = tension
+  ) => {
     const newPattern = patternFactory.generateChordPattern(
-      density, 
-      octave, 
-      chordType, 
-      progressionStyle, 
-      complexity, 
-      tension
+      newDensity, 
+      newOctave, 
+      newChordType, 
+      newStyle, 
+      newComplexity, 
+      newTension
     );
     setPattern(newPattern);
+  };
+
+  const generatePattern = () => {
+    regeneratePattern();
   };
 
   const handleDensityChange = (newDensity: number) => {
     setDensity(newDensity);
-    const newPattern = patternFactory.generateChordPattern(
-      newDensity, 
-      octave, 
-      chordType, 
-      progressionStyle, 
-      complexity, 
-      tension
-    );
-    setPattern(newPattern);
+    regeneratePattern(newDensity);
   };
 
   const handleOctaveChange = (newOctave: number) => {
     setOctave(newOctave);
-    const newPattern = patternFactory.generateChordPattern(
-      density, 
-      newOctave, 
-      chordType, 
-      progressionStyle, 
-      complexity, 
-      tension
-    );
-    setPattern(newPattern);
+    regeneratePattern(density, newOctave);
   };
 
   const handleChordTypeChange = (newType: ChordType) => {
     setChordType(newType);
-    const newPattern = patternFactory.generateChordPattern(
-      density, 
-      octave, 
-      newType, 
-      progressionStyle, 
-      complexity, 
-      tension
-    );
-    setPattern(newPattern);
+    regeneratePattern(density, octave, newType);
   };
 
   const handleProgressionStyleChange = (newStyle: ProgressionStyle) => {
     setProgressionStyle(newStyle);
-    const newPattern = patternFactory.generateChordPattern(
-      density, 
-      octave, 
-      chordType, 
-      newStyle, 
-      complexity, 
-      tension
-    );
-    setPattern(newPattern);
+    regeneratePattern(density, octave, chordType, newStyle);
   };
 
   const handleComplexityChange = (newComplexity: number) => {
     setComplexity(newComplexity);
-    const newPattern = patternFactory.generateChordPattern(
-      density, 
-      octave, 
-      chordType, 
-      progressionStyle, 
-      newComplexity, 
-      tension
-    );
-    setPattern(newPattern);
+    regeneratePattern(density, octave, chordType, progressionStyle, newComplexity);
   };
 
   const handleTensionChange = (newTension: number) => {
     setTension(newTension);
-    const newPattern = patternFactory.generateChordPattern(
-      density, 
-      octave, 
-      chordType, 
-      progressionStyle, 
-      complexity, 
-      newTension
-    );
-    setPattern(newPattern);
+    regeneratePattern(density, octave, chordType, progressionStyle, complexity, newTension);
   };
 
   const handlePlay = () => {
