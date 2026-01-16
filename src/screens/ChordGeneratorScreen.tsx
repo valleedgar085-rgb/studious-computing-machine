@@ -10,6 +10,7 @@ import { ResetClearControls } from '../components/ResetClearControls';
 import { PatternPadEditor } from '../components/PatternPadEditor';
 import { TemplateControls } from '../components/TemplateControls';
 import { Snackbar } from '../components/Snackbar';
+import { AudioVisualizer } from '../components/AudioVisualizer';
 
 export const ChordGeneratorScreen: React.FC = () => {
   const [pattern, setPattern] = useState<Pattern | null>(null);
@@ -69,8 +70,17 @@ export const ChordGeneratorScreen: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Chord Generator</h2>
+    <div style={{ padding: '20px', maxWidth: '1400px', margin: '0 auto' }}>
+      <h2 style={{ 
+        color: '#ecf0f1', 
+        marginBottom: '20px',
+        fontSize: '28px',
+        textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)'
+      }}>
+        Chord Generator
+      </h2>
+      
+      <AudioVisualizer isPlaying={isPlaying} />
       
       <div style={{ 
         display: 'flex', 
@@ -95,21 +105,25 @@ export const ChordGeneratorScreen: React.FC = () => {
         <button
           onClick={handlePlay}
           style={{
-            padding: '12px 24px',
+            padding: '15px 40px',
             backgroundColor: isPlaying ? '#e74c3c' : '#27ae60',
             color: 'white',
-            border: 'none',
-            borderRadius: '4px',
+            border: isPlaying ? '2px solid #c0392b' : '2px solid #229954',
+            borderRadius: '8px',
             cursor: 'pointer',
-            fontSize: '16px',
-            fontWeight: 'bold'
+            fontSize: '18px',
+            fontWeight: 'bold',
+            boxShadow: isPlaying 
+              ? '0 4px 15px rgba(231, 76, 60, 0.4)' 
+              : '0 4px 15px rgba(39, 174, 96, 0.4)',
+            transition: 'all 0.3s ease'
           }}
         >
-          {isPlaying ? 'Stop' : 'Play'}
+          {isPlaying ? '⏸ Stop' : '▶ Play'}
         </button>
       </div>
 
-      <PatternPadEditor pattern={pattern} />
+      <PatternPadEditor pattern={pattern} isPlaying={isPlaying} />
 
       {snackbar && (
         <Snackbar
