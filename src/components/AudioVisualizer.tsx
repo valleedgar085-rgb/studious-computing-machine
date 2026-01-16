@@ -4,10 +4,12 @@ interface AudioVisualizerProps {
   isPlaying: boolean;
 }
 
+const BAR_COUNT = 32;
+
 export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number | null>(null);
-  const [bars] = useState(() => Array.from({ length: 32 }, () => Math.random()));
+  const [bars] = useState(() => Array.from({ length: BAR_COUNT }, () => Math.random()));
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -18,8 +20,7 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying }) =
 
     const width = canvas.width;
     const height = canvas.height;
-    const barCount = 32;
-    const barWidth = width / barCount;
+    const barWidth = width / BAR_COUNT;
 
     let phase = 0;
 
@@ -32,7 +33,7 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying }) =
       gradient.addColorStop(0.5, '#f39c12');
       gradient.addColorStop(1, '#2ecc71');
 
-      for (let i = 0; i < barCount; i++) {
+      for (let i = 0; i < BAR_COUNT; i++) {
         const barHeight = isPlaying
           ? (Math.sin(phase + i * 0.5) * 0.5 + 0.5) * height * 0.7 + height * 0.1
           : bars[i] * height * 0.3;
@@ -71,6 +72,7 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying }) =
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
       }
     };
   }, [isPlaying, bars]);

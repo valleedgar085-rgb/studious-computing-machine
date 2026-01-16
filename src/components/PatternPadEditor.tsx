@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Pattern } from '../types';
+import { transportEngine } from '../services/TransportEngine';
 
 interface PatternPadEditorProps {
   pattern: Pattern | null;
@@ -21,9 +22,13 @@ export const PatternPadEditor: React.FC<PatternPadEditorProps> = ({ pattern, isP
 
   useEffect(() => {
     if (isPlaying && grid.length > 0) {
+      // Calculate interval based on BPM and quantization (assuming 1/8 notes)
+      const bpm = transportEngine.getBPM();
+      const intervalMs = (60000 / bpm) / 2; // 1/8 note = half a beat
+      
       const interval = setInterval(() => {
         setActiveColumn((prev) => (prev + 1) % (grid[0]?.length || 16));
-      }, 125); // 8th notes at 120 BPM
+      }, intervalMs);
       return () => clearInterval(interval);
     } else {
       setActiveColumn(0);
