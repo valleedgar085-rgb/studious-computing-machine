@@ -95,8 +95,22 @@ class MusicTheoryService {
    */
   parseChordSymbol(symbol: string): { root: string; type: ChordType } {
     // Handle flat/sharp notation
-    const root = symbol.match(/^[A-G][#b]?/)?.[0] || 'C';
-    const suffix = symbol.slice(root.length).toLowerCase();
+    let root = symbol.match(/^[A-G][#b]?/)?.[0] || 'C';
+    
+    // Normalize flats to sharps
+    const flatToSharp: Record<string, string> = {
+      'Db': 'C#',
+      'Eb': 'D#',
+      'Gb': 'F#',
+      'Ab': 'G#',
+      'Bb': 'A#'
+    };
+    
+    if (root.includes('b')) {
+      root = flatToSharp[root] || root;
+    }
+    
+    const suffix = symbol.slice(symbol.match(/^[A-G][#b]?/)?.[0].length || 0).toLowerCase();
 
     let type: ChordType = 'major';
     
@@ -124,6 +138,17 @@ class MusicTheoryService {
     const transposedChords = template.map(chordSymbol => {
       const { root, type } = this.parseChordSymbol(chordSymbol);
       const rootIndex = this.notes.indexOf(root);
+      
+      // If root not found, try to use it as-is
+      if (rootIndex === -1) {
+        console.warn(`Could not find root note: ${root} from symbol: ${chordSymbol}`);
+        return {
+          root: 'C',
+          intervals: this.chordIntervals[type],
+          type
+        };
+      }
+      
       const transposedIndex = (rootIndex + keyIndex) % 12;
       const transposedRoot = this.notes[transposedIndex];
       
